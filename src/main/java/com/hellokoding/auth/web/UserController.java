@@ -4,12 +4,13 @@ import com.hellokoding.auth.model.User;
 import com.hellokoding.auth.model.Weather;
 import com.hellokoding.auth.service.SecurityService;
 import com.hellokoding.auth.service.UserService;
+import com.hellokoding.auth.service.WeatherService;
 import com.hellokoding.auth.validator.UserValidator;
 
 import java.security.Principal;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.spi.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,19 +24,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class UserController {
 	
-	//private static final Logger logger = LoggerFactory.getLogger(UserController.class);	
+	private static final Logger logger = LoggerFactory.getLogger(UserController.class);	
     @Autowired
     private UserService userService;
 
     @Autowired
     private SecurityService securityService;
-
+@Autowired
+private WeatherService weatherService;
     @Autowired
     private UserValidator userValidator;
 
     
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public String registration(Model model) {
+    	logger.debug("Registration called");
         model.addAttribute("userForm", new User());
 
         return "registration";
@@ -68,7 +71,8 @@ public class UserController {
 */
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
     public String registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult, Model model) {
-        userValidator.validate(userForm, bindingResult);
+    	logger.debug("Registration with post called with userform");
+    	userValidator.validate(userForm, bindingResult);
 
         if (bindingResult.hasErrors()) {
             return "registration";
@@ -77,12 +81,13 @@ public class UserController {
         userService.save(userForm);
 
         securityService.autologin(userForm.getUsername(), userForm.getPasswordConfirm());
-
+        logger.debug("autologin called");
         return "redirect:/welcome";
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(Model model, String error, String logout) {
+    	logger.debug("Login (get )");
         if (error != null)
             model.addAttribute("error", "Your username and password is invalid.");
 
@@ -94,6 +99,7 @@ public class UserController {
 
     @RequestMapping(value = {"/", "/welcome"}, method = RequestMethod.GET)
     public String welcome(Model model,Principal p) {
+    	logger.debug("user logged in successfully");
     	String s=p.getName();
     	User u=userService.findByUsername(s);//String username);
     	model.addAttribute("defaultloc",u.getLocation());
@@ -103,8 +109,9 @@ public class UserController {
 
     @RequestMapping(value = "/getforecast/place", method = RequestMethod.GET)
     public String getforecast(@RequestParam("place")String loc,@RequestParam("days")String days,Model model) {
-    	
-    	 Weather w=new Weather(loc,"sunny","28","24","29","89%");
+    	logger.debug("Getting weather forecast for "+loc);
+    	 //Weather w=new Weather(loc,"sunny","28","24","29","89%");
+    	Weather w= weatherService.findByPlace(loc);
     	model.addAttribute("temperature",w.getTemperature());
     	model.addAttribute("place",loc);
     	model.addAttribute("mintemp",w.getMintemp());
@@ -122,6 +129,9 @@ public class UserController {
     	model.addAttribute("days",days);
     	}
         return "welcome";
+        /*INSERT INTO `weather` (`id` ,`humidity`,`maxtemp`,`mintemp`,`place`,`temperature`,`weather`)
+VALUES
+(1,'45%','32','23','hyderabad','25','sunny');*/
     }
      
 }

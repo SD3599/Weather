@@ -1,6 +1,6 @@
 package com.hellokoding.auth.model;
 
-import java.util.Set;
+
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -31,6 +31,11 @@ import javax.persistence.Table;
 			this.mintemp = mintemp;
 			this.maxtemp = maxtemp;
 			this.humidity = humidity;
+		}
+
+		public Weather() {
+			super();
+			// TODO Auto-generated constructor stub
 		}
 
 		@Id
