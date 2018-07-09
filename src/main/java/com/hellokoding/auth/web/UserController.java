@@ -5,6 +5,11 @@ import com.hellokoding.auth.model.Weather;
 import com.hellokoding.auth.service.SecurityService;
 import com.hellokoding.auth.service.UserService;
 import com.hellokoding.auth.validator.UserValidator;
+
+import java.security.Principal;
+
+import org.apache.log4j.Logger;
+import org.apache.log4j.spi.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class UserController {
+	
+	//private static final Logger logger = LoggerFactory.getLogger(UserController.class);	
     @Autowired
     private UserService userService;
 
@@ -26,13 +33,39 @@ public class UserController {
     @Autowired
     private UserValidator userValidator;
 
+    
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public String registration(Model model) {
         model.addAttribute("userForm", new User());
 
         return "registration";
     }
+    /*
+    @RequestMapping(value = "/forgotpassword", method = RequestMethod.GET)
+    public String forgotpassword(Model model) {//,Principal p) {
+   // 	String s=p.getName();
+    //	User u=userService.findByUsername(s);//String username);
+    //	model.addAttribute("question",u.getSecurityquestion());
+        model.addAttribute("answer","");
+        return "forgotpassword";
+    }
+    @RequestMapping(value = "/forgotpassword", method = RequestMethod.POST)
+    public String checkforgotpassword(@ModelAttribute("userForm") String answer,@RequestParam("secanswer")String secanswer, Model model,Principal p) {
+    	String s=p.getName();
+    	User u=userService.findByUsername(s);//String username);
+    	String a=u.getSecurityanswer();
+    	System.out.println("Answer "+answer+" SecANswer "+secanswer);
+    	//String aaa=("secanswer");
+    	if(a.equals(secanswer))
+    	{
+    	securityService.autologin(u.getUsername(), u.getPassword());
 
+        return "redirect:/welcome";
+        }
+    	else //to add a line highlighting wrong password
+    		return "redirect:/forgotpassword";
+    }
+*/
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
     public String registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult, Model model) {
         userValidator.validate(userForm, bindingResult);
@@ -60,7 +93,10 @@ public class UserController {
     }
 
     @RequestMapping(value = {"/", "/welcome"}, method = RequestMethod.GET)
-    public String welcome(Model model) {
+    public String welcome(Model model,Principal p) {
+    	String s=p.getName();
+    	User u=userService.findByUsername(s);//String username);
+    	model.addAttribute("defaultloc",u.getLocation());
         return "welcome";
     }
     
@@ -77,11 +113,14 @@ public class UserController {
     	model.addAttribute("weather",w.getWeather());
     	//if(day)days=2;
     	int day=Integer.parseInt(days);
+    	if(day>0)
+    	{
     	for(int i=0;i<day;i++)
     	{
     		model.addAttribute("day"+i,w);
     	}
     	model.addAttribute("days",days);
+    	}
         return "welcome";
     }
      

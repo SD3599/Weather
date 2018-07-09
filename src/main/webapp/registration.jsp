@@ -54,6 +54,36 @@
                 <form:errors path="passwordConfirm"></form:errors>
             </div>
         </spring:bind>
+        
+         <spring:bind path="securityquestion">
+            <div class="form-group ${status.error ? 'has-error' : ''}">
+                <!--<form:input type="text" path="securityquestion" class="form-control" placeholder="Username"
+                            autofocus="true"></form:input>
+                <form:errors path="securityquestion"></form:errors>-->
+                <select name="securityquestion">
+                <option value="What is your Petname" selected>What is your Petname</option>
+   				<option value="What is your Mother's Maiden name">What is your Mother's Maiden name"</option>
+  				<option value="What is your Native Place">What is your Native Place</option>
+ 				<option value="What is your Mother tongue">What is your Mother tongue</option>
+                </select>
+            </div>
+        </spring:bind>
+        
+         <spring:bind path="securityanswer">
+            <div class="form-group ${status.error ? 'has-error' : ''}">
+                <form:input type="text" path="securityanswer" class="form-control"
+                            placeholder="Type answer"></form:input>
+                <form:errors path="securityanswer"></form:errors>
+            </div>
+        </spring:bind>
+        
+         <spring:bind path="Location">
+            <div class="form-group ${status.error ? 'has-error' : ''}">
+                <form:input type="text" path="location" class="form-control" placeholder="Location"
+                            autofocus="true"></form:input>
+                <form:errors path="location"></form:errors>
+            </div>
+        </spring:bind>
 
         <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
     </form:form>

@@ -10,6 +10,9 @@ public class User {
     private String username;
     private String password;
     private String passwordConfirm;
+    private String securityquestion;
+    private String securityanswer;
+    private String location;
     private Set<Role> roles;
 
     @Id
@@ -38,7 +41,33 @@ public class User {
         this.password = password;
     }
 
-    @Transient
+  
+
+	public String getSecurityquestion() {
+		return securityquestion;
+	}
+
+	public void setSecurityquestion(String securityquestion) {
+		this.securityquestion = securityquestion;
+	}
+
+	public String getSecurityanswer() {
+		return securityanswer;
+	}
+
+	public void setSecurityanswer(String securityanswer) {
+		this.securityanswer = securityanswer;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	@Transient
     public String getPasswordConfirm() {
         return passwordConfirm;
     }

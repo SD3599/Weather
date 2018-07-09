@@ -38,7 +38,6 @@
 
 </div>
  
-
 <form action="/getforecast/place" method="get">  
 
 <div class="container">
@@ -53,18 +52,24 @@
   <option value="Pune">
 </datalist>
   for
-   <input type="text" name="days" > days
-   <input type="submit" value="get"/>
+   <input type="text" name="days" value="10"> days
+   <input type="submit" value="get" />
    </div>  
   </form>  
   <div class="container">
   <%@ page import="com.hellokoding.auth.model.Weather" %>
   <% 
+  String defaultloc=(String)request.getAttribute("defaultloc");  
+  if(defaultloc!=null){
+	  out.print( "Temperature for "+defaultloc); 
+  }
   String place=(String)request.getAttribute("place");  
+  
   if(place!=null){  
   out.print( "Temperature for "+place); 
   }
-  else
+  
+  else if(defaultloc==null)
 	  out.print( "Temperature for Hyderabad");
 String t=(String)request.getAttribute("temperature");  
 if(t!=null){  
