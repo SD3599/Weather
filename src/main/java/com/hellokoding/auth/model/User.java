@@ -15,7 +15,25 @@ public class User {
     private String location;
     private Set<Role> roles;
 
-    @Id
+    public User() {
+		super();
+	}
+
+	public User(String username) {
+		super();
+		
+		this.username = username;
+		
+	}
+	
+
+	public User(String username, String location) {
+		super();
+		this.username = username;
+		this.location = location;
+	}
+
+	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long getId() {
         return id;

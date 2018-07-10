@@ -112,6 +112,8 @@ private WeatherService weatherService;
     	logger.debug("Getting weather forecast for "+loc);
     	 //Weather w=new Weather(loc,"sunny","28","24","29","89%");
     	Weather w= weatherService.findByPlace(loc);
+    	if(w==null)
+    		w=new Weather(loc,"sunny","28","24","29","89%");
     	model.addAttribute("temperature",w.getTemperature());
     	model.addAttribute("place",loc);
     	model.addAttribute("mintemp",w.getMintemp());
